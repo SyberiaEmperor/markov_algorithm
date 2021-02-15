@@ -3,7 +3,7 @@
 
 int main()
 {
-    setlocale(LC_ALL, "Russian_Russia.1251");
+    setlocale(LC_ALL, "Russian");
 
     terminal(cin);
     

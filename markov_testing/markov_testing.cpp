@@ -134,15 +134,15 @@ namespace markovtesting
 			assert(me.apply_word(w) == "");
 
 			s1 = {
-				"->*",
 				"*1->1*",
 				"*0->0*",
 				"1*->#1",
 				"0*->#0",
-				"*=>",
 				"1#->#0",
+				"*=>",
 				"0#=>1",
-				"#=>1"
+				"#=>1",
+				"->*",
 			};
 
 			me.set_system(p.get_subs(s1));
@@ -153,8 +153,7 @@ namespace markovtesting
 			assert(me.apply_word(w) == "11");
 			w = "111";
 			assert(me.apply_word(w) == "1001");
-			w = "";
-			assert(me.apply_word(w) == "10");
+
 
 			s1 = {
 				"ba->a",

@@ -4,9 +4,10 @@
 int enter_menu()
 {
 	cout << "1.Установить схему" << endl;
-	cout << "2.Ввести слово" << endl;
-	cout << "3.Помощь" << endl;
-	cout << "4.Выйти" << endl;
+	cout << "2.Установить схему из файла" << endl;
+	cout << "3.Ввести слово" << endl;
+	cout << "4.Помощь" << endl;
+	cout << "5.Выйти" << endl;
 
 	string s = "3";
 	cin >> s;
@@ -41,6 +42,50 @@ void set_system(istream& input_stream, markov_engine& me, parser& p)
 	cout << "Схема успешно установлена" << endl;
 }
 
+void set_system_from_file(markov_engine& me, parser& p)
+{
+	string filename = "";
+
+	cout << "Введите имя файла: " << endl;
+	cin >> filename;
+
+	if (filename.find(".txt")==string::npos)
+		throw invalid_argument("Некорректный ввод");
+
+	ifstream ifs(filename);
+
+	if (!ifs)
+		throw invalid_argument("Не удаётся открыть файл");
+
+	vector<string> input = vector<string>();
+
+	int count = 0;
+
+	while (ifs)
+	{
+		string str = "";
+
+		ifs >> str;
+
+		if (!count && str != "<")
+			throw invalid_argument("Неверный формат файла");
+
+		if (str == ">")
+			break;
+
+		if(count>0)
+		input.push_back(str);
+
+		count++;
+	}
+
+	ifs.close();
+
+	me.set_system(p.get_subs(input));
+
+	cout << "Схема успешно установлена" << endl;
+}
+
 void enter_word(markov_engine& me, parser& p)
 {
 	cout << "Введите слово: " << endl;
@@ -54,13 +99,13 @@ void enter_word(markov_engine& me, parser& p)
 
 void help_m()
 {
-	wifstream ifs("help.txt");
+	ifstream ifs("help.txt");
 	ifs.imbue(locale(ifs.getloc(), new codecvt_utf8<wchar_t>));
 	while (ifs)
 	{
-		wstring str;
+		string str;
 		getline(ifs, str);
-		wcout << str << endl;
+		cout << str << endl;
 	}
 }
 
@@ -83,12 +128,15 @@ void terminal(istream& input_stream)
 			set_system(input_stream, me, p);
 			break;
 		case 2:
-			enter_word(me,p);
+			set_system_from_file(me, p);
 			break;
 		case 3:
-			help_m();
+			enter_word(me,p);
 			break;
 		case 4:
+			help_m();
+			break;
+		case 5:
 			end = true;
 			break;
 		default:
