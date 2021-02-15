@@ -42,16 +42,8 @@ void set_system(istream& input_stream, markov_engine& me, parser& p)
 	cout << "Схема успешно установлена" << endl;
 }
 
-void set_system_from_file(markov_engine& me, parser& p)
+void set_system_from_file(string& filename, markov_engine& me, parser& p)
 {
-	string filename = "";
-
-	cout << "Введите имя файла: " << endl;
-	cin >> filename;
-
-	if (filename.find(".txt")==string::npos)
-		throw invalid_argument("Некорректный ввод");
-
 	ifstream ifs(filename);
 
 	if (!ifs)
@@ -73,8 +65,8 @@ void set_system_from_file(markov_engine& me, parser& p)
 		if (str == ">")
 			break;
 
-		if(count>0)
-		input.push_back(str);
+		if (count > 0)
+			input.push_back(str);
 
 		count++;
 	}
@@ -82,6 +74,19 @@ void set_system_from_file(markov_engine& me, parser& p)
 	ifs.close();
 
 	me.set_system(p.get_subs(input));
+}
+
+void read_file(markov_engine& me, parser& p)
+{
+	string filename = "";
+
+	cout << "Введите имя файла: " << endl;
+	cin >> filename;
+
+	if (filename.find(".txt")==string::npos)
+		throw invalid_argument("Некорректный ввод");
+
+	set_system_from_file(filename, me, p);
 
 	cout << "Схема успешно установлена" << endl;
 }
@@ -128,7 +133,7 @@ void terminal(istream& input_stream)
 			set_system(input_stream, me, p);
 			break;
 		case 2:
-			set_system_from_file(me, p);
+			read_file(me, p);
 			break;
 		case 3:
 			enter_word(me,p);

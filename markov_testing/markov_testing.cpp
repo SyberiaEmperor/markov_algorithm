@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "../markov_algorithm/markov_engine.h"
-#include "../markov_algorithm/parser.h"
+#include "../markov_algorithm/terminal.h"
+#include "../markov_algorithm/terminal.cpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -170,6 +170,38 @@ namespace markovtesting
 			assert(me.apply_word(w) == "baaaa");
 			w = "bababab";
 			assert(me.apply_word(w) == "baa");
+
+		}
+
+		TEST_METHOD(INTEL_TEST)
+		{
+			parser p;
+			markov_engine me;
+			string filename = "../markov_algorithm/text_systems/intel8088.txt";
+			set_system_from_file(filename, me, p);
+
+			string w = "AX";
+			assert(me.apply_word(w) == "AX");
+			w = "XAX";
+			assert(me.apply_word(w) == "");
+			w = "BXDX";
+			assert(me.apply_word(w) == "");
+
+		}
+
+		TEST_METHOD(SORT_TEST)
+		{
+			parser p;
+			markov_engine me;
+			string filename = "../markov_algorithm/text_systems/abc_sort.txt";
+			set_system_from_file(filename, me, p);
+
+			string w = "bbca";
+			assert(me.apply_word(w) == "abbc");
+			w = "ccc";
+			assert(me.apply_word(w) == "ccc");
+			w = "aaca";
+			assert(me.apply_word(w) == "aaac");
 
 		}
 	};

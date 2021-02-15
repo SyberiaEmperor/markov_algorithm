@@ -11,4 +11,3 @@
 #include <locale>
 
 using namespace std;
-using namespace placeholders;
